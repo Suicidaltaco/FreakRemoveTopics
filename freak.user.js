@@ -1,4 +1,4 @@
-// ==UserScript==
+﻿// ==UserScript==
 //
 //Displayable Name of your script 
 // @name           Freak.no custom frontpage 
