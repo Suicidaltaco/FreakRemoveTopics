@@ -32,39 +32,57 @@
 
 var bannedTopics = ["Kjøp av maskinvare"];
 
+
+
 function inList(myList, value)
 {
     for(var x=0; x<myList.length; x++)
     {
-        if(myList[x] == value)
+        if(value.indexOf(myList[x]) !== -1)
             return true;
     }
     return false;
 }
 
-old_tbody = document.getElementById("collapseobj_module_5");
-var rows = document.getElementById("collapseobj_module_5").childNodes;
-
-for(var i=rows.length-1; i >= 0 ; i--)
+if (location.pathname == "/")
 {
-    var child = rows[i];
-    if(child.childNodes.length < 13)
-        continue;
+	old_tbody = document.getElementById("collapseobj_module_5");
+	var rows = document.getElementById("collapseobj_module_5").childNodes;
 
-    var j;
-    for(j=0; j < child.childNodes.length; j++)
-    {
-        if(child.childNodes[j].nodeName == "#text")
-            continue;
-            
-        if((child.childNodes[j].hasAttribute("title")))
-        {
-            if(inList(bannedTopics, child.childNodes[j].title))
-            {
-                old_tbody.removeChild(child);
-            }
-            break;
-        }
-    }
+	for(var i=rows.length-1; i >= 0 ; i--)
+	{
+		var child = rows[i];
+		if(child.childNodes.length < 13)
+			continue;
+
+		var j;
+		for(j=0; j < child.childNodes.length; j++)
+		{
+			if(child.childNodes[j].nodeName == "#text")
+				continue;
+				
+			if((child.childNodes[j].hasAttribute("title")))
+			{
+				if(inList(bannedTopics, child.childNodes[j].title))
+				{
+					old_tbody.removeChild(child);
+				}
+				break;
+			}
+		}
+	}
 }
 
+if (location.pathname == "/forum/search.php")
+	{
+	var td = document.getElementsByTagName("td");
+	//for loop? fuck that
+	var i = td.length - 1;
+	while (i >= 0)
+		{
+		if (inList(bannedTopics, td[i].innerHTML))
+			td[i].parentNode.parentNode.removeChild(td[i].parentNode);
+		i--;
+		}
+	}
+		
