@@ -35,12 +35,12 @@ var bannedTopics = ["Kjøp av maskinvare", "Rusforum", "Rusmidler", "Rusdebatt",
 
 function inList(myList, value)
 {
-    for(var x=0; x<myList.length; x++)
-    {
-        if(value.indexOf(myList[x]) !== -1)
-            return true;
-    }
-    return false;
+	for(var x=0; x<myList.length; x++)
+	{
+		if(value.indexOf(myList[x]) !== -1)
+			return true;
+	}
+	return false;
 }
 
 function getElementsToRemove(table)
@@ -51,7 +51,7 @@ function getElementsToRemove(table)
 	for(var i=linktags.length-1; i >= 0 ; i--)
 	{
 		if(inList(bannedTopics, linktags[i].innerText))
-			elementsToRemove.push(linktags[i].parentNode.parentNode);
+		elementsToRemove.push(linktags[i].parentNode.parentNode);
 	}
 
 	return elementsToRemove;
@@ -60,12 +60,11 @@ function getElementsToRemove(table)
 function removeFromFrontpage()
 {
 	old_tbody = document.getElementById("collapseobj_module_5");
-
 	var elementsToRemove = getElementsToRemove(old_tbody);
 
 	for(var i=0; i < elementsToRemove.length; i++)
 		old_tbody.removeChild(elementsToRemove[i].parentNode);
-}
+	}
 
 function removeFromSearchPage()
 {
@@ -79,9 +78,22 @@ function removeFromSearchPage()
 		table.childNodes[1].removeChild(elementsToRemove[i]);
 }
 
+function removeFromKpPage() {
+	var table = document.getElementsByTagName("tbody")[7];
+	if(table == null)
+		return
+
+	var elementsToRemove = getElementsToRemove(table);
+
+	for(var i=0; i < elementsToRemove.length; i++)
+		table.removeChild(elementsToRemove[i]);	
+}
+
 
 if (location.pathname == "/")
 	removeFromFrontpage();
 else if (location.pathname == "/forum/search.php")
 	removeFromSearchPage();
-		
+else if (location.pathname == "/forum/kvalitetspoeng.php")
+	removeFromKpPage()
+
