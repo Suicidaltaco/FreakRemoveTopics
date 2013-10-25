@@ -30,7 +30,7 @@
 //
 // ==/UserScript==
 
-var bannedTopics = ["Kjøp av maskinvare", "Rusforum", "Rusmidler", "Rusdebatt", "Rusrapporter", "Utvalgte rusforumtråder", "Research Chemicals", "Legal highs"];  
+var bannedTopics = ["Kjøp av maskinvare", "Rusforum", "Rusmidler", "Rusdebatt", "Rusrapporter", "Utvalgte rusforumtråder", "Research Chemicals", "Legal highs", "Rus på legemidler"];  
 
 
 function inList(myList, value)
@@ -43,48 +43,37 @@ function inList(myList, value)
     return false;
 }
 
-
-function removeFromFrontpage()
+function getElementsToRemove(table)
 {
-	old_tbody = document.getElementById("collapseobj_module_5");
-	var rows = document.getElementById("collapseobj_module_5").childNodes;
-
-	for(var i=rows.length-1; i >= 0 ; i--)
-	{
-		var child = rows[i];
-		if(child.childNodes.length < 13)
-			continue;
-
-		for(var j=0; j < child.childNodes.length; j++)
-		{
-			if(child.childNodes[j].nodeName == "#text")
-				continue;
-				
-			if((child.childNodes[j].hasAttribute("title")))
-			{
-				if(inList(bannedTopics, child.childNodes[j].title))
-				{
-					old_tbody.removeChild(child);
-				}
-				break;
-			}
-		}
-	}
-}
-
-function removeFromSearchPage()
-{
-	var table = document.getElementById("threadslist");
+	var linktags = table.getElementsByTagName("a");
 	var elementsToRemove = [];
-	if(table == null)
-		return
 
-	var linktags = document.getElementById("threadslist").getElementsByTagName("a");
 	for(var i=linktags.length-1; i >= 0 ; i--)
 	{
 		if(inList(bannedTopics, linktags[i].innerText))
 			elementsToRemove.push(linktags[i].parentNode.parentNode);
 	}
+
+	return elementsToRemove;
+}
+
+function removeFromFrontpage()
+{
+	old_tbody = document.getElementById("collapseobj_module_5");
+
+	var elementsToRemove = getElementsToRemove(old_tbody);
+
+	for(var i=0; i < elementsToRemove.length; i++)
+		old_tbody.removeChild(elementsToRemove[i].parentNode);
+}
+
+function removeFromSearchPage()
+{
+	var table = document.getElementById("threadslist");
+	if(table == null)
+		return
+
+	var elementsToRemove = getElementsToRemove(table.childNodes[1]);
 
 	for(var i=0; i < elementsToRemove.length; i++)
 		table.childNodes[1].removeChild(elementsToRemove[i]);
