@@ -30,8 +30,7 @@
 //
 // ==/UserScript==
 
-var bannedTopics = ["Kjøp av maskinvare"];
-
+var bannedTopics = ["Kjøp av maskinvare", "Rusforum", "Rusmidler", "Rusdebatt", "Rusrapporter", "Utvalgte rusforumtråder", "Research Chemicals", "Legal highs"];  
 
 
 function inList(myList, value)
@@ -44,7 +43,8 @@ function inList(myList, value)
     return false;
 }
 
-if (location.pathname == "/")
+
+function removeFromFrontpage()
 {
 	old_tbody = document.getElementById("collapseobj_module_5");
 	var rows = document.getElementById("collapseobj_module_5").childNodes;
@@ -55,8 +55,7 @@ if (location.pathname == "/")
 		if(child.childNodes.length < 13)
 			continue;
 
-		var j;
-		for(j=0; j < child.childNodes.length; j++)
+		for(var j=0; j < child.childNodes.length; j++)
 		{
 			if(child.childNodes[j].nodeName == "#text")
 				continue;
@@ -73,16 +72,27 @@ if (location.pathname == "/")
 	}
 }
 
-if (location.pathname == "/forum/search.php")
+function removeFromSearchPage()
+{
+	var table = document.getElementById("threadslist");
+	var elementsToRemove = [];
+	if(table == null)
+		return
+
+	var linktags = document.getElementById("threadslist").getElementsByTagName("a");
+	for(var i=linktags.length-1; i >= 0 ; i--)
 	{
-	var td = document.getElementsByTagName("td");
-	//for loop? fuck that
-	var i = td.length - 1;
-	while (i >= 0)
-		{
-		if (inList(bannedTopics, td[i].innerHTML))
-			td[i].parentNode.parentNode.removeChild(td[i].parentNode);
-		i--;
-		}
+		if(inList(bannedTopics, linktags[i].innerText))
+			elementsToRemove.push(linktags[i].parentNode.parentNode);
 	}
+
+	for(var i=0; i < elementsToRemove.length; i++)
+		table.childNodes[1].removeChild(elementsToRemove[i]);
+}
+
+
+if (location.pathname == "/")
+	removeFromFrontpage();
+else if (location.pathname == "/forum/search.php")
+	removeFromSearchPage();
 		
