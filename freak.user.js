@@ -46,11 +46,8 @@ function getElementsToRemove(table)
 	var elementsToRemove = [];
 
 	for(var i=linktags.length-1; i >= 0 ; i--)
-	{
 		if(inList(bannedTopics, linktags[i].innerText))
 			elementsToRemove.push(linktags[i].parentNode.parentNode);
-	}
-
 	return elementsToRemove;
 }
 
@@ -61,7 +58,7 @@ function removeFromFrontpage()
 
 	for(var i=0; i < elementsToRemove.length; i++)
 		old_tbody.removeChild(elementsToRemove[i].parentNode);
-	}
+}
 
 function removeFromSearchPage()
 {
