@@ -35,11 +35,8 @@ var bannedTopics = ["Kjøp av maskinvare", "Rusforum", "Rusmidler", "Rusdebatt",
 
 function inList(myList, value)
 {
-	for(var x=0; x<myList.length; x++)
-	{
-		if(value.indexOf(myList[x]) !== -1)
+	if(myList.indexOf(value) != -1)
 			return true;
-	}
 	return false;
 }
 
@@ -51,7 +48,7 @@ function getElementsToRemove(table)
 	for(var i=linktags.length-1; i >= 0 ; i--)
 	{
 		if(inList(bannedTopics, linktags[i].innerText))
-		elementsToRemove.push(linktags[i].parentNode.parentNode);
+			elementsToRemove.push(linktags[i].parentNode.parentNode);
 	}
 
 	return elementsToRemove;
